@@ -18,11 +18,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 
-from dotenv import load_dotenv
-import os
-
-
-load_dotenv()
 
 
 
@@ -35,7 +30,7 @@ SECRET_KEY = 'django-insecure-dkw#0hg#dmw4yygmg_ym0evtz13pt1$*_-)18qc4+qdbsk49-)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.vercel.app']
 
 
 # Application definition
