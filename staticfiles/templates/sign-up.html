@@ -1,0 +1,10 @@
+
+
+
+<form action="{% url 'userauthentication_app:sign-up' %}" method="post">
+    {% csrf_token %}
+
+    {{form}}
+
+    <button type="submit">Submit</button>
+</form>

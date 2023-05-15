@@ -1,0 +1,551 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+
+    <!-- icon link -->
+    <link rel="icon" href="{% static './images/youtube-icon.png' %}" type="images/png">
+
+
+    <!-- css link -->
+    <link rel="stylesheet" href="{% static './css/style.css' %}">
+    <link rel="stylesheet" href="{% static './css/video.css' %}">
+    <base href="{% static '' %}">
+
+
+    <!-- javascript link -->
+    <script src="{% static './javascript/main.js' %}" defer></script>
+
+
+    <!-- cdn links -->
+
+    <!-- // Font Awesome CDN -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"
+        integrity="sha384-3B6NwesSXE7YJlcLI9RpRqGf2p/EgVH8BgoKTaUrmKNDkHPStTQ3EyoYjCGXaOTS" crossorigin="anonymous" />
+
+    <!-- // Google Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+
+
+    <!-- jquery cdn -->
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+
+    <!-- axios cdn  link -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.6/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
+
+</head>
+
+<body>
+
+    <div class="header">
+
+        <!-- Menu logo and youtube-icon start-->
+
+        <div class="header-left">
+            <i id="menu" class="material-icons">menu</i>
+            <a href="{% url 'coreapp:homepage' %}"><img
+                    src="https://www.xda-developers.com/files/2017/08/After-12-Years-Google-Gives-YouTube-a-New-Logo-1900x700_c.png"
+                    alt="youtube-icon"></a>
+        </div>
+        <!-- Header Menu logo and youtube-icon end-->
+
+
+        <!-- Header search box start-->
+        <div class="header-search">
+            <form action="" style="border-radius: 10px;">
+                <input type="text" placeholder="Search here">
+                <button><i class="material-icons">search</i></button>
+            </form>
+        </div>
+        <!-- Header search box end-->
+
+
+        <!-- Header icons start-->
+        <div class="header_icons">
+            <i class="material-icons display-this">search</i>
+            <i class="material-icons ">videocam</i>
+            <i class="material-icons ">apps</i>
+            <i class="material-icons display-this">notifications</i>
+            <i id="drop_down" class="material-icons display-this">account_circle</i>
+        </div>
+        <!-- Header icons end-->
+
+    </div>
+
+
+    <!-- main body starts -->
+    <main class="single_pages">
+        <section class="video_items flex">
+            <div class="left">
+                <div class="left_content">
+                    <video controls style="width: 100%; height: 100%;">
+                        <source src="{{ video.video.url }}" type="video/mp4" poster="./images/1.jpg">
+                    </video>
+
+                    <div class="tag">
+                        <label for="" class="tags">
+                            {% for tag in video.tags.all %}
+                            <a href="{% url 'coreapp:tags' tag.slug %}" id="video_tag">
+
+                                #{{tag.name}}
+                            </a>
+                            {% endfor %}
+                        </label>
+                        <p><strong>{{video.title|truncatechars:60}}</strong></p>
+
+                    </div>
+
+                    <div class="view flex2 border_bottom">
+                        <div class="view_text">
+                            <span>{{video.views}} views</span>
+                        </div>
+
+                        <div class="flex">
+                             <div class="icon big">
+                                <button id="like_button" onclick="addLike()"><i class="fa fa-thumbs-up"></i></button>
+                                <label for=""><span id="like_count"></span></label>
+                            </div> 
+                            {% comment %} <div class="icon big">
+                                <a href="" id="like_button" onclick="addLike()><i class="fa fa-thumbs-up"></i></a>
+                                <label for=""><span id="like_count"></label>
+                            </div> {% endcomment %}
+                            <div class="icon big">
+                                <a href=""><i class="fa fa-thumbs-down"></i></a>
+                                <label for=""></label>
+                            </div>
+                            <div class="icon big">
+                                {% comment %} coreapp:video_details/{{video.id}} {% endcomment %}
+                                
+                                <a href="{% url 'channel_app:share_via_whatsapp' text='hello there' %}"><i class="fa fa-share"></i></a>
+                                <!-- your template code -->
+                          
+
+                                <label for="">Share</label>
+                            </div>
+                            
+                            <div class="icon">
+                                <a href="{% url 'coreapp:save_video' video.id %}" class="text">
+                                    <i class="fa fa-bookmark"></i>
+                                    <label for="">Save</label>
+                                </a>
+                            </div>
+
+                            <div class="icon">
+                                <a href="{% url 'channel_app:edit_upload' video.user.id video.id %}" class="text"><i class="fa fa-ellipsis"></i>
+                                <label for="">Edit</label>
+                                </a>
+                                
+                            </div>
+
+                            
+                        </div>
+                    </div>
+
+
+                    <div class="details flex border_bottom">
+                        <div class="img">
+                            <img src="{{video.user.channel.image.url}}" alt="">
+                        </div>
+
+                        <div class="heading">
+                            <a href="{% url 'channel_app:channel_profile' channel.id %}" style=" text-decoration: none;"><h4>{{video.user.channel.channel_name|title}}<small></a>
+                                    {% if video.user.channel.verified %}
+                                    <i class="fa fa-check-circle"></i>
+                                    {% endif %}
+                                </small></h4>
+
+                            <!-- <span id="count"></span><span>  subscriber{{pluralize}}</span> -->
+
+                             <span id="count"></span><span> Subscribers{{pluralize}}</span>
+
+                            <h5>{{video.description}}</h5>
+                            <span><i class="fa fa-caret-down"></i> show more</span>
+                        </div>
+
+                        <!-- with htmx -->
+
+                        <div>
+                            <div><button id="sub_btn" class="channel-subscribe sub_button_channel" onclick="addSubscriber()"><strong>Subscribe</strong></button></div>
+                        </div>
+
+                    </div>
+
+                    <hr class="mid_hr">
+                                                                
+                    <div class="comment">
+                        <div class="comment_heading flex">
+                            <h4><b>{{comment.all.count}} Comments</b></h4>
+                            <h4><i class="fa fa-list-ul"></i> <label>Sort by</label></h4>
+                        </div>
+
+                    </div>
+
+
+                    <div class="details comment_self flex">
+                        <div class="img">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3zvjrP91V6P2aZNaBZMa6eHMT2op-5M79AbDxaduhgg&usqp=CAU&ec=48665699"
+                                alt="logo">
+                        </div>
+
+                        {% if request.user.is_authenticated %}
+                        <form action="" style="width: 100%;" id="comment_form">
+                            {% csrf_token %}
+
+                            <div class="heading flex">
+                                <input type="hidden" value="{{video.id}}" id="id" name="id">
+                                <input type="text" placeholder="Add a comment..." id="comment" name="comment">
+                                <button id="send"><i class="material-icons">send</i></button>
+                            </div>
+
+                        </form>
+
+                        {% else %}
+
+                        <a href="{% url 'userauthentication_app:sign-in' %}" style="margin-top: 10px;">Login first to Comment</a>
+
+                        {% endif %}
+
+                    </div>
+
+
+
+                    <div id="comment_wrapper">
+
+                        {% for cmt in comment %}
+                        <div class="comment_tray">
+
+
+                            <div class="details_comment">
+                                <div class="details flex">
+                                    <div class="img">
+                                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3zvjrP91V6P2aZNaBZMa6eHMT2op-5M79AbDxaduhgg&usqp=CAU&ec=48665699"
+                                            alt="">
+                                    </div>
+
+                                    <div class="heading">
+                                        <h4><b>{{cmt.user.username|title}}</b> &nbsp;• <span>{{cmt.date|timesince}}
+                                                ago</span></h4>
+                                        <p>{{cmt.comment}}</p>
+                                        <div class="comment_like flex">
+                                            <div class="icon">
+                                                <i class="fa fa-thumbs-up"></i>
+                                                <label for=""><small>5</small></label>
+                                            </div>
+                                            <div class="icon">
+                                                <i class="fa fa-thumbs-down"></i>
+                                                <label for=""><small>Dislike</small></label>
+                                            </div>
+                                            <div class="icon">
+
+                                                <label for=""><a href="" style="text-decoration: none;"><small>Reply</small></a></label>
+
+                                                <input type="hidden" value="{{cmt.id}}" name="cmt_id">
+
+                                                <label for=""><button class="btn_del" data-id="{{cmt.id}}" style="color: red; text-decoration: none; margin-left: 15px; border: none; cursor: pointer; font-size: 15px;"><small><i class="fa fa-trash"></i>
+                                                </small></button></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="reply">
+                                {% comment %} <label for="" class="tags"><i class="fa fa-caret-up"></i>Hide reply</label> {% endcomment %}
+                                <div class="reply_details flex">
+                                    <div class="img">
+                                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3zvjrP91V6P2aZNaBZMa6eHMT2op-5M79AbDxaduhgg&usqp=CAU&ec=48665699"
+                                            alt="">
+                                    </div>
+
+                                    <div class="text">
+                                        <h4><label for="">Anil Kumar</label><span>12 Months ago</span></h4>
+                                        <p>Thnaks for your comment, Note: (This is an auto generated reply)
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <hr>
+                        </div>
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="right">
+                <div class="right_content">
+                    <button class="chat">Show Chat Reply</button>
+
+                    <div class="tags">
+                        <label for="" class="tags_bg">All</label>
+                        <label for="" class="tags_bg">Web design</label>
+                        <label for="" class="tags_bg">Frontend</label>
+                        <label for="" class="tags_bg">Backend</label>
+                    </div>
+
+
+                    <!-- video which comes into sidebar -->
+                    {% for similar_video in similar_videos %}
+                    <div class="video_items video_sidebar flex">
+                        <a href="{% url 'coreapp:video_details' video.id %}">
+                            <img src="{{similar_video.image.url}}" alt="" id="side_video" style="object-fit: cover;">
+                        </a>
+
+                        <div class="details">
+                            <p><a href="{% url 'coreapp:video_details' video.id %}"><strong>{{similar_video.title|truncatechars:30}}</strong></a></p><br>
+                            <span>{{similar_video.user.channel.channel_name}} <i class="fa fa-check-circle"></i></span><br>
+                            <span>{{similar_video.views}} Views. {{similar_video.date|timesince}} Ago</span>
+                        </div>
+                    </div> 
+                    {% endfor %}
+
+                   
+
+
+
+                </div>
+            </div>
+
+        </section>
+    </main>
+    <!-- main body end -->
+
+
+
+</body>
+
+
+
+</html>
+
+
+<script type="text/javascript">
+    $(document).on("submit", "#comment_form", function (e) {
+        e.preventDefault()
+        // console.log("submittedddd")
+        let comment = $("#comment").val()
+
+        $.ajax({
+            type: "POST",
+            url: "{% url 'coreapp:comment' %}",
+            data: {
+                id: $("#id").val(),
+                comment: comment,
+                csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
+            },
+
+            success: function () {
+                console.log("comment got saved in db");
+                
+
+
+
+
+                    // html code
+                    let _html= '<div class="details_comment">\
+                        <div class="details flex">\
+                            <div class="img">\
+                                <img src="https://encrypted-tbn0.gstatic.com/images?\q=tbn:ANd9GcS3zvjrP91V6P2aZNaBZMa6eHMT2op-5M79AbDxaduhgg&usqp=CAU&ec=48665699" alt="">\
+                            </div>\
+                            <div class="heading">\
+                                <h4><b>{{ request.user.username | title }}</b> &nbsp;• <span>{% now "H:i" %} </span></h4>\
+                                <p> '+ comment +' </p>\
+                                <div class="comment_like flex">\
+                                    <div class="icon">\
+                                        <i class="fa fa-thumbs-up"></i>\
+                                        <label for=""><small>5</small></label>\
+                                    </div>\
+                                    <div class="icon">\
+                                        <i class="fa fa-thumbs-down"></i>\
+                                        <label for=""><small>Dislike</small></label>\
+                                    </div>\
+                                    <div class="icon">\
+                                    <label for=""><a href=""><small>Reply</small></a></label>\
+                                    </div>\
+                                </div>\
+                            </div>\
+                        </div>\
+                            </div >\
+                    <div class="reply">\
+                        <label for="" class="tags"><i class="fa fa-caret-up"></i>Hide reply</label>\
+                        <div class="reply_details flex">\
+                            <div class="img">\
+                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3zvjrP91V6P2aZNaBZMa6eHMT2op-5M79AbDxaduhgg&usqp=CAU&ec=48665699" alt="">\
+                            </div>\
+                            <div class="text">\
+                                <h4><label for="">Anil Kumar</label><span>12 Months ago</span></h4>\
+                                <p>Thnaks for your comment, Note: (This is an auto generated reply) </p>\
+                            </div>\
+                        </div>\
+                    </div>\
+                    <hr>\
+                    '
+
+                // end html code
+
+                $("#comment_wrapper").prepend(_html)
+                $("#comment").val("")
+
+
+
+
+
+            },
+            error: function (error) {
+                console.log(error);
+
+            }
+
+        })
+    })
+
+
+    // delete comment
+
+    $("#comment_wrapper").on("click", ".btn_del", function(){
+        console.log("dellla is clicked");
+
+        let id= $(this).attr("data-id")
+
+        myData={
+            id: id
+        }
+
+        mythis= $(this)
+
+        $.ajax({
+            type: "POST",
+            url: "{% url 'coreapp:delete_comment' %}",
+            data: myData,
+            success: function (data) {
+                
+                if(data.status == 1){
+                   
+                    $(mythis).closest(".comment_tray").fadeOut();
+                }
+                if(data.status == 2){
+                    
+                    alert("unable to delete comment")
+                }
+                
+            }
+        })
+    })
+</script>
+
+
+
+
+{% comment %} like and dislike button feature {% endcomment %}
+
+
+
+<script>
+
+    let likescounter=  document.getElementById("like_count")
+    let like_button= document.getElementById("like_button")
+    let likes_added= []
+
+    //  addSubscriber
+    function addLike() {
+        axios
+            .get('{% url 'coreapp:add-new_likes' video.id %}')
+            .then(like_response => {  
+                this.like_response= like_response.data
+                like_button.innerHTML= this.like_response
+                loadLikes()
+                
+        })
+
+    }
+
+    // load subscriber
+    function loadLikes() {
+        axios
+            .get('{% url 'coreapp:load_video_likes' video.id %}')
+            .then(like_response => {  
+                this.like_response= like_response.data
+                likes_added= this.like_response
+
+                likescounter.innerHTML= likes_added.length
+        })
+
+        
+    }
+
+    // window.load()= loadSubscriber()
+    window.addEventListener('load', loadLikes);
+
+
+</script>
+
+
+
+{% comment %} subscribe and unsubscribe feature {% endcomment %}
+
+
+<script>
+    let subscriber_count=  document.getElementById("count")
+    let subscribe_button= document.getElementById("sub_btn")
+    let subscriber_added= []
+    
+
+    //  addSubscriber
+    function addSubscriber() {
+        
+        axios
+            .get('{% url 'coreapp:add_subscriber' channel.user.id %}')
+            .then(response =>{  
+                console.log(response, "lkdnk")
+                this.response= response.data
+                console.log(this.response, "anil")
+                
+                subscribe_button.innerHTML= this.response
+                loadSubscriber()
+                subscribe_button.classList.toggle= ("unsubscribe-btn")
+        })
+
+    }
+
+    // load subscriber
+    function loadSubscriber() {
+        console.log("about to get subs")
+        axios
+            .get('{% url 'coreapp:load_channel_subscribers' channel.user.id %}')
+            .then(response =>{  
+                
+                this.response= response.data
+                subscriber_added= this.response
+                console.log(subscriber_added, "added")
+
+                subscriber_count.innerHTML= subscriber_added.toString()
+        })
+
+        
+    }
+
+    // window.load()= loadSubscriber()
+    window.addEventListener('load', loadSubscriber);
+</script>
+ 
+

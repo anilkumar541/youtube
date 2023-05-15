@@ -1,0 +1,40 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login page</title>
+
+
+    <!-- link css -->
+    <link rel="stylesheet" href="{% static './css/login.css' %}">
+
+    {% comment %} axios {% endcomment %}
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    
+</head>
+<body>
+    
+    <ddiv class="login-box">
+        <img src="https://cdn.vox-cdn.com/thumbor/Pkmq1nm3skO0-j693JTMd7RL0Zk=/0x0:2012x1341/1200x800/filters:focal(0x0:2012x1341)/cdn.vox-cdn.com/uploads/chorus_image/image/47070706/google2.0.0.jpg" alt="">
+
+        <h1 class="sign-in">Sign In</h1>
+        <x1 class="google-account">Use your google account</x1>
+
+
+        <input type="text" placeholder="Email or Phone">
+        <br>
+        <x2><a href="">Forgot email?</a></x2>
+                
+        <small class="learn-more">Not your computer? Use a private browsing window to sign in.<span>Learn more</span></small>
+
+        <x3>Create account</x3>
+        <button type="submit">Submit</button>
+        
+    </ddiv>
+
+</body>
+</html>

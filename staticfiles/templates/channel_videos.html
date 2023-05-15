@@ -1,0 +1,227 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Youtube</title>
+    <link rel="icon" type="images/png" href="images/youtube-icon.png">
+    <link rel="stylesheet" href="{% static './css/style_copy.css' %}" type="text/css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css" integrity="sha384-3B6NwesSXE7YJlcLI9RpRqGf2p/EgVH8BgoKTaUrmKNDkHPStTQ3EyoYjCGXaOTS" crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    
+    <base href="{% static '' %}">
+
+      {% comment %} axios {% endcomment %}
+      <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+
+</head>
+<body>
+
+    <div class="header">
+        <!-- Header menu Start -->
+
+        <div class="header__left">
+            <i id="menu" class="material-icons">menu</i>
+            <a href="{% url 'coreapp:homepage' %}">
+                <img src="https://www.xda-developers.com/files/2017/08/After-12-Years-Google-Gives-YouTube-a-New-Logo-1900x700_c.png" alt="">
+            </a>
+        </div>
+        <!-- Header menu end -->
+
+        <!-- Header seach Start -->
+
+        <div class="header__search">
+            <form action="">
+                <input type="text" placeholder="Search">
+                <button><i class="material-icons">search</i></button>
+            </form>
+        </div>
+        <!-- Header search Start -->
+        
+        <!-- Header Icons Start -->
+        <div class="header__icons">
+            <i class="material-icons display-this">search</i>
+            <i class="material-icons ">videocam</i>
+            <i class="material-icons">apps</i>
+            <i class="material-icons display-this">notifications</i>
+            <i id="drop-down" class="material-icons display-this">account_circle</i>
+        </div>
+        <!-- Header Icons Ends -->
+
+    </div>
+
+    <!-- Main Body Starts -->
+    <div class="mainBody">
+        <div class="sidebar">
+            <div class="sidebar__categories">
+                
+                <!-- Single Category -->
+                <a href="index.html">
+                    <div class="sidebar__category">
+                        <i class="material-icons">home</i>
+                        <span>Home</span>
+                    </div>
+                </a>
+
+                <!-- Single Category -->
+                <div class="sidebar__category">
+                    <i class="material-icons">local_fire_department</i>
+                    <span>Trending</span>
+                </div>
+
+                <!-- Single Category -->
+                <div class="sidebar__category">
+                    <i class="material-icons">subscriptions</i>
+                    <span>Subscriptions</span>
+                </div>
+            </div>
+            <hr>
+            <div class="sidebar__categories">
+
+                <!-- Single Category -->
+                <div class="sidebar__category">
+                    <i class="material-icons">library_add_check</i>
+                    <span>Library</span>
+                </div>
+
+                <!-- Single Category -->
+                <div class="sidebar__category">
+                    <i class="material-icons">history</i>
+                    <span>History</span>
+                </div>
+
+                <!-- Single Category -->
+                <div class="sidebar__category">
+                    <i class="material-icons">play_arrow</i>
+                    <span>Your Videos</span>
+                </div>
+
+                <!-- Single Category -->
+                <div class="sidebar__category">
+                    <i class="material-icons">watch_later</i>
+                    <span>Watch Later</span>
+                </div>
+
+                <!-- Single Category -->
+                <div class="sidebar__category">
+                    <i class="material-icons">thumb_up</i>
+                    <span>Liked Videos</span>
+                </div>
+            </div>
+            <hr>
+        </div>
+        <!-- Sidebar Ends -->
+
+        <!-- Video Section Starts -->
+        <div class="videos">
+            
+            <div class="channel-art">
+                <img src="images/channel-art.jpg" alt="">
+            </div>
+            <div class="channel-header flex">
+                <div class="channel-img-title flex">
+                    <img class="img" src="{{channel.image.url}}" alt="">
+                    <div class="channel-image-texts">
+                        <h4>{{channel.channel_name}}</h4>
+                        <span id="count"></span><span> Subscribers</span>
+                    </div>
+                </div>
+                <div class="channel-header-btns">
+                    <div><a href="" class="channel-join">Join</a></div>
+                    <div><button id="sub_btn" class="channel-subscribe sub_button_channel" onclick="addSubscriber()">Subscribe</button></div>
+                </div>
+            </div>
+            <div class="channel-header-links flex">
+                <a href="{% url 'channel_app:channel_profile' channel.id %}" class="display-this">Home</a>
+                <a href="{% url 'channel_app:get_channel_videos' channel.id %}" class="display-this">Videos</a>
+                <a href="{% url 'channel_app:channel_community' channel.id %}" class="dont-display-thdis">Community</a>
+                {% comment %} <a href="index.html" class="dont-display-this">Membership</a>
+                <a href="index.html" class="dont-display-this">Channels</a> {% endcomment %}
+                <a href="{% url 'channel_app:channel_about' channel.id %}" class="display-this">About</a>
+                <a href=""><i class="material-icons">search</i></a>
+            </div>
+            
+            <hr>
+            <br>
+            <div class="popular-video flex">
+                <h3>All Videos</h3>
+                
+            </div>
+            <br>
+
+            {% for video in videos %}
+            <div class="videos__container">
+                <!-- Single Video Starts Here -->
+                <div class="video">
+                    <div class="video__thumbnail">
+                        
+                        <a href="{% url 'coreapp:video_details' video.id %}"><img src="{{video.image.url}}" alt=""></a>
+                    </div>
+                    <div class="video__details">
+                        <div class="author">
+                            <img src="{{video.user.channel.image.url}}" alt="">
+                        </div>
+                        <div class="title">
+                            <h3>{{video.title|truncatechars:50}}</h3>
+                            <a href=""><small>{{video.user.channel.channel_name}} <i class="fas fa-check-circle"></i></small></a>
+                            <span><small>{{video.views}} views . {{video.date|timesince}} </small></span>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                
+
+              
+
+
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+
+        let subscriber_count=  document.getElementById("count")
+        let subscribe_button= document.getElementById("sub_btn")
+        let subscriber_added= []
+    
+        //  addSubscriber
+        function addSubscriber() {
+            axios
+                .get('{% url 'coreapp:add_subscriber' channel.user.id %}')
+                .then(response =>{  
+                    this.response= response.data
+                    
+                    subscribe_button.innerHTML= this.response
+                    loadSubscriber()
+                    subscribe_button.classList.toggle= ("unsubscribe-btn")
+            })
+    
+        }
+    
+        // load subscriber
+        function loadSubscriber() {
+            axios
+                .get('{% url 'coreapp:load_channel_subscribers' channel.user.id %}')
+                .then(response =>{  
+                    this.response= response.data
+                    subscriber_added= this.response
+    
+                    subscriber_count.innerHTML= subscriber_added.toString()
+            })
+    
+            
+        }
+    
+        // window.load()= loadSubscriber()
+        window.addEventListener('load', loadSubscriber);
+    </script>
+
+
+</body>
+</html>

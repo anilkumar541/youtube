@@ -1,0 +1,255 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+
+    <!-- icon link -->
+    <link rel="icon" href="{% static './images/youtube-icon.png' %}" type="images/png">
+
+
+    <!-- css link -->
+    <link rel="stylesheet" href="{% static './css/style.css' %}">
+
+
+    <!-- javascript link -->
+    <script src="{% static './javascript/main.js' %}" defer></script>
+
+    {% comment %} axios {% endcomment %}
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+
+    <!-- cdn links -->
+
+    <!-- // Font Awesome CDN -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css" integrity="sha384-3B6NwesSXE7YJlcLI9RpRqGf2p/EgVH8BgoKTaUrmKNDkHPStTQ3EyoYjCGXaOTS" crossorigin="anonymous" />
+
+    <!-- // Google Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+
+ 
+        <style>
+           
+            .message-alert{
+                background-color: rgb(166, 255, 166);
+                padding: 14px;
+                margin-bottom: 30px;
+                border-radius: 10px;
+                border: 1px solid green;
+             
+            }
+        </style>
+    
+</head>
+<body>
+    
+    <div class="header">
+
+        <!-- Menu logo and youtube-icon start-->
+
+        <div class="header-left">
+            <i id="menu" class="material-icons">menu</i>
+            <img src="https://www.xda-developers.com/files/2017/08/After-12-Years-Google-Gives-YouTube-a-New-Logo-1900x700_c.png" alt="youtube-icon">
+        </div>
+        <!-- Header Menu logo and youtube-icon end-->
+
+
+        <!-- Header search box start-->
+        <div class="header-search">
+            <form action="{% url 'coreapp:search_video' %}" method="GET">
+                <input type="text" placeholder="Search here" name="q">
+                <button><i class="material-icons">search</i></button>
+            </form>
+        </div>
+        <!-- Header search box end-->
+
+
+        <!-- Header icons start-->
+        <div class="header_icons">
+            <i class="material-icons display-this">search</i>
+            <a href="{% url 'channel_app:video_upload' %}"><i class="material-icons ">videocam</i></a>
+            <i class="material-icons ">apps</i>
+            <a href="{% url 'channel_app:create_community_post' request.user.id %}"><i class="material-icons ">add</i></a>
+            <i class="material-icons display-this">notifications</i>
+            <i id="drop_down" class="material-icons display-this">account_circle</i>
+        </div>
+        <!-- Header icons end-->
+
+    </div>
+
+    {% comment %} include alert.html file here show alerts {% endcomment %}
+    {% include 'partials/alert.html' %}
+
+    <!-- main body starts -->
+    <div class="mainBody">
+
+        <!-- sidebar starts -->
+
+        <div class="sidebar">
+            <div class="sidebar-categories">
+
+                <!-- single category -->
+                <div class="sidebar-category">
+                    <i class="material-icons display-this">home</i>
+                    <span>Home</span>
+                </div>
+
+                <!-- single category -->
+                <div class="sidebar-category">
+                    <i class="material-icons display-this">local_fire_department</i>
+                    <span>Trending</span>
+                </div>
+
+                <!-- single category -->
+                <div class="sidebar-category">
+                    <i class="material-icons display-this">subscriptions</i>
+                    <span>Subscriptions</span>
+                </div>
+
+            </div>
+            <hr>
+
+            
+                
+            <div class="sidebar-categories">
+
+                <!-- single category -->
+                <div class="sidebar-category">
+                    <i class="material-icons display-this">library_add_check</i>
+                    <span>Library</span>
+                </div>
+
+                <!-- single category -->
+                <div class="sidebar-category">
+                    <i class="material-icons display-this">history</i>
+                    <span>History</span>
+                </div>
+
+
+                <!-- single category -->
+                <div class="sidebar-category">
+                    <i class="material-icons display-this">play_arrow</i>
+                    <span>Your videos</span>
+                </div>
+
+
+                <!-- single category -->
+                <div class="sidebar-category">
+                    <i class="material-icons display-this">watch_later</i>
+                    <span>Watch later</span>
+                </div>
+
+
+                <!-- single category -->
+                <div class="sidebar-category">
+                    <i class="material-icons display-this">thumb_up</i>
+                    <span>Liked videos</span>
+                </div>
+              
+              
+
+        
+            </div>
+
+            <hr>
+
+            {% comment %} new start {% endcomment %}
+            <div class="sidebar-categories">
+
+                {% if request.user.is_authenticated %}
+                <!-- single category -->
+                <a href="{% url 'userauthentication_app:sign-out' %}" style="text-decoration: none;">
+                    <div class="sidebar-category">
+                        <i class="material-icons display-this">logout</i>
+                        <span>Logout</span>
+                    </div>
+                </a>
+                {% else %}
+                <!-- single category -->
+                <a href="{% url 'userauthentication_app:sign-in' %}" style="text-decoration: none;">
+                    <div class="sidebar-category">
+                        <i class="material-icons display-this">login</i>
+                        <span>Login</span>
+                    </div>
+                </a>
+                {% endif %}
+
+
+
+            </div>
+            <hr>
+            {% comment %} new start end {% endcomment %}
+
+            
+            <hr>
+
+
+        </div>
+
+        <!-- sidebar ends -->
+
+        
+        <!-- video section start -->
+        <div class="videos">
+            
+            <div class="drop_down_container">
+                <h1 style="font-size: 20px;"><small>Showing results for tag: "{{tag}}"</small></h1>
+                
+                <div class="dropdown_content_background">
+                    <div class="dropdown_content">
+                        <div class="dropdown_content">
+                            <i class="material-icons">videocam</i>
+                            <span>Create</span>
+                        </div>
+                        <div class="dropdown_content">
+                            <i class="material-icons">settings</i>
+                            <span>Settings</span>
+                        </div>
+                        <div class="dropdown_content">
+                            <i class="material-icons">person</i>
+                            <span>Switch account</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="videos_container">
+                <!-- single video stars here -->
+
+                {% for vid in video %}
+                <div class="video">
+                    <div class="video_thumbnail">
+                        <a href="{% url 'coreapp:video_details' vid.id %}"><img src="{{vid.image.url}}" alt="video_thumbnail"></a>
+                </div>
+
+                    <div class="video_details">
+                        <div class="author">
+                            <img src="{{vid.user.channel.image.url}}" alt="author">
+                        </div>
+
+                        <div class="title">
+                            <a href="{% url 'coreapp:video_details' vid.id %}"><h3>{{vid.title|truncatechars:35}}</h3></a> 
+                            <a href=""><small>{{vid.user.channel.channel_name}} {% if vid.user.channel.verified %} <i class="fas fa-check-circle">{% endif %}</i></small></a>
+                            <span><small>{{vid.views}} views . {{vid.date|timesince}}</small></span>
+                        </div>
+                    </div>
+                </div>
+
+                {% endfor %}
+                
+            </div>
+        </div>
+        <!-- video section end -->
+
+    </div>
+    <!-- main body end -->
+
+
+
+</body>
+</html>
